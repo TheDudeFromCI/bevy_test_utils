@@ -1,0 +1,22 @@
+[package]
+name = "bevy_test_utils"
+version = "0.1.0"
+authors = ["TheDudeFromCI <thedudefromci@gmail.com>"]
+edition = "2021"
+description = "A small collection of test utilities for reducing boilerplate code when writing unit tests for Bevy."
+readme = "README.md"
+homepage = "https://github.com/TheDudeFromCI/bevy_test_utils"
+repository = "https://github.com/TheDudeFromCI/bevy_test_utils"
+license = "Apache-2.0"
+keywords = ["bevy", "test", "util"]
+categories = ["games", "game-engines", "test"]
+
+[dependencies]
+bevy = { version = "0.9.1", default-features = false, features = [] }
+
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
