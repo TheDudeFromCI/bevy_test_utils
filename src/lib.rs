@@ -22,6 +22,13 @@ pub trait TestApp {
     /// The system is not added to the app.
     fn run_system_once<Params>(&mut self, system: impl IntoSystemDescriptor<Params>);
 
+    /// Causes the provided list of systems to be executed once, immediately, on
+    /// parallel threads. Any queued commands are not executed until all
+    /// systems within the list have been executed.
+    ///
+    /// The systems are not added to the app.
+    fn run_systems_once<Params>(&mut self, system: Vec<impl IntoSystemDescriptor<Params>>);
+
     /// Collects all events of the indicated type currently within the system
     /// and returns an iterator over all of them.
     ///
@@ -33,6 +40,15 @@ pub trait TestApp {
 impl TestApp for App {
     fn run_system_once<Params>(&mut self, system: impl IntoSystemDescriptor<Params>) {
         SystemStage::single(system).run(&mut self.world);
+    }
+
+    fn run_systems_once<Params>(&mut self, systems: Vec<impl IntoSystemDescriptor<Params>>) {
+        let mut stage = SystemStage::parallel();
+        for system in systems {
+            stage.add_system(system);
+        }
+
+        stage.run(&mut self.world);
     }
 
     fn collect_events<E: Event + Clone>(&mut self) -> Box<dyn Iterator<Item = E>> {
