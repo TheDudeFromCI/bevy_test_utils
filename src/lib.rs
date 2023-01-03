@@ -28,7 +28,7 @@ pub trait TestApp {
     /// updating containing only the indicated system set.
     ///
     /// The system set is not added to the app.
-    fn run_system_set_once<Params>(&mut self, system: SystemSet);
+    fn run_system_set_once(&mut self, system: SystemSet);
 
     /// Collects all events of the indicated type currently within the system
     /// and returns an iterator over all of them.
@@ -43,7 +43,7 @@ impl TestApp for App {
         SystemStage::single(system).run(&mut self.world);
     }
 
-    fn run_system_set_once<Params>(&mut self, systems: SystemSet) {
+    fn run_system_set_once(&mut self, systems: SystemSet) {
         SystemStage::parallel().with_system_set(systems).run(&mut self.world);
     }
 
